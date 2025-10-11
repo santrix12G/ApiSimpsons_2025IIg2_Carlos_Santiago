@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./NavBar.css";
 
 function Sidebar() {
@@ -8,6 +9,7 @@ function Sidebar() {
   const [characters, setCharacters] = useState([]);
   const [url_image, setUrlImage] = useState("");
   const numberRandom = Math.floor(Math.random() * 60) + 1;
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`https://thesimpsonsapi.com/api/characters/${numberRandom}`)
@@ -26,17 +28,17 @@ function Sidebar() {
 
   const goToRandomEpisode = () => {
     const randomId = Math.floor(Math.random() * 20) + 1;
-    window.location.href = `/episodes/${randomId}`;
+     navigate(`/episodes/${randomId}`);
   };
 
   const goToRandomCharacter = () => {
     const randomId = Math.floor(Math.random() * 20) + 1;
-    window.location.href = `/characters/${randomId}`;
+     navigate(`/characters/${randomId}`);
   }
 
   const goToRandomLocation = () => {
     const randomId = Math.floor(Math.random() * 20) + 1;
-    window.location.href = `/locations/${randomId}`;
+     navigate(`/locations/${randomId}`);
   }
 
   return (
