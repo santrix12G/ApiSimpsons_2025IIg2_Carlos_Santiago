@@ -1,0 +1,82 @@
+.main {
+  flex: 1;
+  background-color: #f9f9f9;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+
+.emoji {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.title-section {
+  color: #FFD90F;
+  text-shadow: 1px 1px 0px #000;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.welcome {
+  text-align: center;
+  padding: 3rem;
+}
+
+.welcome .emoji {
+  font-size: 5rem;
+}
+
+.welcome .icons span {
+  margin: 0 0.5rem;
+  font-size: 2rem;
+}
+
+/* Estilos al componente de paginación */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0;
+  padding: 20px;
+  margin-top: 2rem;
+}
+
+/* Estilos base */
+.pagination .MuiPaginationItem-root {
+  color: #2c2c2c;
+  font-weight: bold;
+  border: 2px solid #ffca28;
+  /* amarillo Simpson */
+  background-color: #fff8e1;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+/* Hover */
+.pagination .MuiPaginationItem-root:hover {
+  background-color: #fff176;
+  transform: scale(1.1);
+}
+
+/* Página seleccionada */
+.pagination .Mui-selected {
+  background-color: #29b6f6;
+  /* azul cielo */
+  color: #fff;
+  border-color: #0288d1;
+  transform: scale(1.15);
+}
+
+/* Hover sobre seleccionada */
+.pagination .Mui-selected:hover {
+  background-color: #0288d1;
+}

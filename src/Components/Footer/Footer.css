@@ -1,0 +1,96 @@
+.footer-simpsons {
+  position: relative;
+  background: linear-gradient(to top, #87CEEB, #b3e5fc);
+  text-align: center;
+  padding: 40px 20px;
+  color: #333;
+  overflow: hidden;
+  font-family: 'Comic Sans MS', 'SimpsonsFont', cursive;
+  border-top: 5px solid #FFD700;
+
+}
+
+.footer-content{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-content p:first-child {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #FFD700;
+  text-shadow: 2px 2px 0 #000;
+}
+
+.footer-content p:last-child {
+  font-size: 0.9rem;
+  margin-top: 5px;
+  color: #333;
+}
+
+/* Nubes animadas */
+
+.cloud-footer {
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: float-footer 20s linear infinite;
+}
+
+.cloud-footer::before,
+.cloud-footer::after {
+  content: '';
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.cloud-1-footer {
+  width: 100px;
+  height: 60px;
+  left: 10%;
+  top: 10px;
+  animation-delay: 0s;
+}
+
+.cloud-1-footer::before {
+  width: 80px;
+  height: 50px;
+  top: -20px;
+  left: 20px;
+}
+
+ .cloud-1-footer::after {
+  width: 70px;
+  height: 40px;
+  top: 10px;
+  left: 60px;
+}
+
+.cloud-2-footer {
+  width: 120px;
+  height: 70px;
+  right: 10%;
+  top: 20px;
+  animation-delay: 10s;
+}
+
+ .cloud-2-footer::before {
+  width: 100px;
+  height: 60px;
+  top: -10px;
+  left: 30px;
+}
+
+ .cloud-2-footer::after {
+  width: 60px;
+  height: 40px;
+  top: 15px;
+  left: 70px;
+}
+
+@keyframes float-footer {
+  from { transform: translateX(-150px); }
+  to { transform: translateX(100vw); }
+}

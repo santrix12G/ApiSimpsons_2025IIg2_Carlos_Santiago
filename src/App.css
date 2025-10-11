@@ -1,0 +1,16 @@
+body .content {
+  display: flex;
+  align-items: stretch;
+  /* importante */
+  min-height: 100vh;
+
+  @media (max-width: 1000px) {
+    flex-direction: column;
+    .sidebar {
+      width: 100%;
+      height: fit-content;
+    }
+  }
+  /* flex-direction: column; */
+  /* asegura que ocupe toda la pantalla */
+}

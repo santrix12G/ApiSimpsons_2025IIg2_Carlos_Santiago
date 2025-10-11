@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700&display=swap');
+
+.simpsons-font {
+  font-family: 'Fredoka One', cursive;
+}
+.body-font {
+  font-family: 'Nunito', sans-serif;
+}
+
+.card-simpson {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+}
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(255, 217, 15, 0.3);
+}
+
+.card-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #FFD90F, #FFC107);
+  position: relative;
+  overflow: hidden;
+  flex-direction: column;
+  width: 100%;
+  height: fit-content;
+}
+.cloud-container{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.simpson-image {
+  width: 50%;
+  aspect-ratio: 1 / 1;
+  border-bottom: 4px solid #000;
+  transition: transform 0.4s ease;
+}
+
+.character-emoji,
+.location-emoji,
+.episode-emoji {
+  font-size: 70px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.floating-donut {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-5px) rotate(5deg); }
+}
+
+.cloud-decoration {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50px;
+}
+.cloud-1 {
+  width: 60px;
+  height: 20px;
+  top: 20px;
+  left: 20px;
+  animation: float 4s ease-in-out infinite;
+}
+.cloud-2 {
+  width: 40px;
+  height: 15px;
+  top: 40px;
+  right: 30px;
+  animation: float 5s ease-in-out infinite reverse;
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+.title-simpson {
+  color: #FFD90F;
+  text-shadow: 2px 2px 0px #000, -1px -1px 0px #000;
+  font-size: 1.3rem;
+  margin-bottom: 0.3rem;
+}
+.subtitle-simpson {
+  background: linear-gradient(90deg, #87CEEB, #4A90E2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+.description {
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.action-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.btn-heart {
+  background: linear-gradient(135deg, #FF69B4, #FF1493);
+  color: white;
+}
+.btn-share {
+  background: linear-gradient(135deg, #9370DB, #8A2BE2);
+  color: white;
+}
+.btn-details {
+  background: linear-gradient(135deg, #FFD90F, #FFC107);
+  color: #000;
+}
+.action-btn:hover {
+  transform: scale(1.1);
+}
+
+.left-actions{
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* === Modal === */
