@@ -4,6 +4,16 @@ import { useEffect, useState } from "react";
 
 const EpisodieModal = ({ episodie, onClose }) => {
 
+
+    const temporadas = {};
+    for (let i = 1; i <= 32; i++) {
+        temporadas[2000 + i] = `https://lossimpson-tvlatino.blogspot.com/search/label/Temporada%20${String(i).padStart(2, '0')}`;
+    }
+
+    
+
+
+
     const [id, setId] = useState(episodie.id);
     const [episodieEspecif, setepisodies] = useState([]);
     const navigate = useNavigate();
@@ -40,6 +50,13 @@ const EpisodieModal = ({ episodie, onClose }) => {
                 <button className="modal-close" onClick={() => navigate("/episodes")}>
                     ¡D’oh! Cerrar
                 </button>
+
+                <button className='btn-see-more' onClick={() => {
+                    window.open(temporadas[2000 + parseInt(episodieEspecif.season)], '_blank');
+                }}>
+                    Ver episodio
+                </button>
+
             </div>
         </div>
     );

@@ -40,6 +40,19 @@
   cursor: pointer;
   font-weight: bold;
   transition: background 0.3s ease;
+  margin: 5px;
+}
+
+
+.btn-see-more{
+  background-color: #ffca28;
+  border: none;
+  border-radius: 10px;
+  color: black;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
 }
 
 .modal-close:hover {
@@ -62,6 +75,7 @@
     transform: scale(0.8);
     opacity: 0;
   }
+
   to {
     transform: scale(1);
     opacity: 1;

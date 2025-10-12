@@ -51,6 +51,7 @@ const CardEpisodies = ({ episodie, size }) => {
                             →
                         </Link>
                     </div>
+                    
                 </div>
             </div>
 
