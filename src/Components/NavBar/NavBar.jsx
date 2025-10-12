@@ -2,11 +2,13 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Box, CircularProgress } from "@mui/material";
 import "./NavBar.css";
 
 function Sidebar() {
   const [quote, setQuote] = useState("Mmm... donuts.");
   const [characters, setCharacters] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [url_image, setUrlImage] = useState("");
   const numberRandom = Math.floor(Math.random() * 60) + 1;
   const navigate = useNavigate();
@@ -16,10 +18,10 @@ function Sidebar() {
       .then((response) => response.json())
       .then((data) => setCharacters(data))
       .catch((error) => console.error(error));
-  });  
- 
+  });
 
-  const getNewQuote = () => {  
+
+  const getNewQuote = () => {
     const quotes = characters.phrases;
     const randomIndex = Math.floor(Math.random() * quotes.length);
     setUrlImage(characters.portrait_path);
@@ -27,18 +29,23 @@ function Sidebar() {
   };
 
   const goToRandomEpisode = () => {
-    const randomId = Math.floor(Math.random() * 20) + 1;
-     navigate(`/episodes/${randomId}`);
+    try {
+      setLoading(true);
+      const randomId = Math.floor(Math.random() * 768) + 1;
+      navigate(`/episodes/${randomId}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const goToRandomCharacter = () => {
-    const randomId = Math.floor(Math.random() * 20) + 1;
-     navigate(`/characters/${randomId}`);
+    const randomId = Math.floor(Math.random() * 1182) + 1;
+    navigate(`/characters/${randomId}`);
   }
 
   const goToRandomLocation = () => {
-    const randomId = Math.floor(Math.random() * 20) + 1;
-     navigate(`/locations/${randomId}`);
+    const randomId = Math.floor(Math.random() * 477) + 1;
+    navigate(`/locations/${randomId}`);
   }
 
   return (
@@ -50,9 +57,9 @@ function Sidebar() {
         <Link to="/episodes" className="btn-simpson">📺 Episodios</Link>
       </nav>
 
-      
+
       <div className="quote-card">
-        <img src={(url_image?"https://cdn.thesimpsonsapi.com/200"+url_image:"https://cdn.thesimpsonsapi.com/500/character/1.webp")} alt="Character" className="character-image" />
+        <img src={(url_image ? "https://cdn.thesimpsonsapi.com/200" + url_image : "https://cdn.thesimpsonsapi.com/500/character/1.webp")} alt="Character" className="character-image" />
         <p className="quote-text">"{quote}"</p>
         <button onClick={getNewQuote} className="btn-quote">📜 New Quote</button>
       </div>
@@ -69,7 +76,14 @@ function Sidebar() {
         </div>
       </div>
 
-      
+      {/* Loader mientras carga */}
+      {loading && (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+          <CircularProgress color="warning" />
+        </Box>
+      )}
+
+
       <div className="donut-area">
         <div className="donut">🍩</div>
         <p className="simpsons-font doh">¡D'oh!</p>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 import './lugares.css'
 import Pagination from "@mui/material/Pagination";
 import CardLocations from '../../Components/CardLocations/CardLocations'
@@ -8,30 +8,33 @@ import DescripcionLocation from '../../Components/Description/DescriptionLocatio
 const lugares = () => {
 
   const [locations, setLocation] = useState([]);
+  const [allLocations, setLocations] = useState([]);
+  const [originalLocations, setOriginalLocations] = useState([]);
   const [page, setPage] = useState(1);
   const [nombre_buscar, setNombreBuscar] = useState("");
   const [estadoButton, setEstadoButton] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
+  let selectedLocation = 0;
 
-  const selectedLocation = id
-    ? locations.find((item) => String(item.id) === String(id))
-    : null;
+  if (id) {
+    selectedLocation = allLocations.find((item) => String(item.id) === String(id));
+  }
 
   useEffect(() => {
     setError(null);
     fetch(`https://thesimpsonsapi.com/api/locations?page=${page}`)
       .then(response => response.json())
-      .then(data => setLocation(data.results))
+      .then(data => { setLocation(data.results); setOriginalLocations(data.results); })
       .catch(error => setError(error.message || "Error al cargar lugares"));
-  }, [page]);
+  },[page])
 
   const handleRetry = () => {
     setError(null);
     fetch(`https://thesimpsonsapi.com/api/locations?page=${page}`)
       .then(response => response.json())
-      .then(data => setLocation(data.results))
+      .then(data => { setLocation(data.results); setOriginalLocations(data.results); })
       .catch(error => setError(error.message || "Error al cargar lugares"));
   };
 
@@ -42,6 +45,31 @@ const lugares = () => {
   const manejarCambio = (e) => {
     setNombreBuscar(e.target.value); // obtiene el texto del input
   };
+
+  useEffect(() => {
+    setError(null);
+    const fetchAllLocations = async () => {
+      let allResults = [];
+      let currentPage = 1;
+      let totalPages = 1;
+      try {
+        do {
+          const response = await fetch(`https://thesimpsonsapi.com/api/locations?page=${currentPage}`);
+          const data = await response.json();
+          if (data.results) {
+            allResults = allResults.concat(data.results);
+          }
+          totalPages = data.pages;
+          currentPage++;
+        } while (currentPage <= totalPages);
+        setLocations(allResults.filter(item => item.name.toLowerCase().includes(nombre_buscar.toLowerCase())));
+      } catch (error) {
+        setError(error.message || "Error al cargar lugares");
+      }
+    };
+    fetchAllLocations();
+
+  }, [page, nombre_buscar]);
 
   if (error) {
     return (
@@ -91,12 +119,14 @@ const lugares = () => {
           <button className="button-s button-search"
             onClick={() => {
               setEstadoButton(true);
+              nombre_buscar.trim() != "" ? setOriginalLocations(allLocations) : null;
             }}
           >
             Search
           </button>
           <button className="button-s button-clear" onClick={() => {
             setNombreBuscar("");
+            setOriginalLocations(locations);
           }}>
             Clear
           </button>
@@ -117,9 +147,7 @@ const lugares = () => {
         className="pagination"
       />
       <div className="grid">
-        {locations.filter(item =>
-            !estadoButton || item.name.toLowerCase().includes(nombre_buscar.toLowerCase())
-          ).map((item) => (
+        {originalLocations.map((item) => (
           <CardLocations key={item.id} location={item} size={"500"} />
         ))}
       </div>

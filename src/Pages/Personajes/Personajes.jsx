@@ -4,9 +4,12 @@ import CardSimpsons from "../../Components/CardSimpsons/CardSimpsons";
 import Pagination from "@mui/material/Pagination";
 import { useParams, useNavigate } from 'react-router-dom';
 import DescripcionCharacter from "../../Components/Description/DescripcionCharacter";
+import { useMemo } from "react";
 
 const Personajes = () => {
   const [characters, setCharacters] = useState([]);
+  const [allCharacters, setAllCharacters] = useState([]);
+  const [charactersOriginal, setCharactersOriginal] = useState([]);
   const [page, setPage] = useState(1);
   const [nombre_buscar, setNombreBuscar] = useState("");
   const [estadoButton, setEstadoButton] = useState(false);
@@ -15,14 +18,14 @@ const Personajes = () => {
   const navigate = useNavigate();
 
   const selectedCharacter = id
-    ? characters.find((item) => String(item.id) === String(id))
+    ? allCharacters.find((item) => String(item.id) === String(id))
     : null;
 
   useEffect(() => {
     setError(null);
     fetch(`https://thesimpsonsapi.com/api/characters?page=${page}`)
       .then((response) => response.json())
-      .then((data) => setCharacters(data.results))
+      .then((data) => {setCharacters(data.results); setCharactersOriginal(data.results);})
       .catch((error) => setError(error.message || "Error al cargar personajes"));
   }, [page]);
 
@@ -30,7 +33,7 @@ const Personajes = () => {
     setError(null);
     fetch(`https://thesimpsonsapi.com/api/characters?page=${page}`)
       .then((response) => response.json())
-      .then((data) => setCharacters(data.results))
+      .then((data) => {setCharacters(data.results); setCharactersOriginal(data.results);})
       .catch((error) => setError(error.message || "Error al cargar personajes"));
   };
 
@@ -44,15 +47,56 @@ const Personajes = () => {
 
   if (error) {
     return (
-      <section style={{textAlign: "center", padding: "40px"}}>
+      <section style={{ textAlign: "center", padding: "40px" }}>
         <h2>¡Ups! Ocurrió un error 😢</h2>
         <p>{error}</p>
-        <button onClick={handleRetry} style={{margin: "12px", padding: "8px 16px", borderRadius: "8px", background: "#007bff", color: "#fff", border: "none"}}>Reintentar</button>
-        <button onClick={() => navigate(-1)} style={{margin: "12px", padding: "8px 16px", borderRadius: "8px", background: "#333", color: "#fff", border: "none"}}>Volver</button>
+        <button onClick={handleRetry} style={{ margin: "12px", padding: "8px 16px", borderRadius: "8px", background: "#007bff", color: "#fff", border: "none" }}>Reintentar</button>
+        <button onClick={() => navigate(-1)} style={{ margin: "12px", padding: "8px 16px", borderRadius: "8px", background: "#333", color: "#fff", border: "none" }}>Volver</button>
       </section>
     );
   }
 
+
+  // traar todo los personajes
+  useEffect(() => {
+    const fetchAllPages = async () => {
+      setError(null);
+      try {
+        const allCharacters = [];
+        let page = 1;
+        let hasMore = true;
+
+        while (hasMore) {
+          const response = await fetch(`https://thesimpsonsapi.com/api/characters?page=${page}`);
+          if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+
+          const data = await response.json();
+          if (data.results?.length > 0) {
+            allCharacters.push(...data.results);
+            page++;
+          } else {
+            hasMore = false;
+          }
+        }
+
+        setAllCharacters(allCharacters);
+      } catch (err) {
+        setError(err.message || "Error al cargar los personajes");
+      }
+    };
+
+    fetchAllPages();
+  }, []);
+
+  const personajesFiltrados = useMemo(() => {
+    const q = nombre_buscar.trim().toLowerCase();
+    if (!q) return allCharacters;
+    return allCharacters.filter(c => c.name?.toLowerCase().includes(q));
+  }, [allCharacters, nombre_buscar]);
+
+
+
+  
   return (
     <section>
       <div className="search-section">
@@ -72,12 +116,14 @@ const Personajes = () => {
           <button className="button-s button-search"
             onClick={() => {
               setEstadoButton(true);
+              nombre_buscar.trim() != "" ? setCharactersOriginal(personajesFiltrados) : setCharactersOriginal(characters);
             }}
           >
             Search
           </button>
           <button className="button-s button-clear" onClick={() => {
             setNombreBuscar("");
+            setCharactersOriginal(characters);
           }}>
             Clear
           </button>
@@ -100,19 +146,17 @@ const Personajes = () => {
       />
 
       <div className="grid">
-        {characters
-          .filter(item =>
-            !estadoButton || item.name.toLowerCase().includes(nombre_buscar.toLowerCase())
-          )
-          .map(item => (
-            <CardSimpsons
-              key={item.id}
-              character={item}
-              size={"200"}
-              type={"Character"}
-            />
-          ))
+        {
+          charactersOriginal.map(item => (
+              <CardSimpsons
+                key={item.id}
+                character={item}
+                size={"200"}
+                type={"Character"}
+              />
+            ))
         }
+
       </div>
 
       {selectedCharacter && (

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import CardEpisodie from "../../Components/CardEpisodies/CardEpisodies"
 import './Episodios.css'
 import Pagination from "@mui/material/Pagination";
@@ -9,6 +9,8 @@ import DescriptionEpisodie from "../../Components/Description/DescriptionEpisodi
 function Episodes() {
 
   const [episodies, setEpisodie] = useState([]);
+  const [allEpisodies, setAllEpisodies] = useState([]);
+  const [episodiesOriginal, setEpisodiesOriginal] = useState([]);
   const [page, setPage] = useState(1);
   const [nombre_buscar, setNombreBuscar] = useState("");
   const [estadoButton, setEstadoButton] = useState(false);
@@ -18,22 +20,49 @@ function Episodes() {
   const navigate = useNavigate();
 
   const selectedEpisodie = id
-    ? episodies.find((item) => String(item.id) === String(id))
+    ? allEpisodies.find((item) => String(item.id) === String(id))
     : null;
+
+
+  useEffect(() => {
+    fetch(`https://thesimpsonsapi.com/api/episodes?page=${page}`)
+      .then(response => response.json())
+      .then(data => {setEpisodie(data.results);setEpisodiesOriginal(data.results);})
+      .catch(error => setError(error.message || "Error al cargar episodios"));
+
+  },[page])
 
   useEffect(() => {
     setError(null);
-    fetch(`https://thesimpsonsapi.com/api/episodes?page=${page}`)
-      .then(response => response.json())
-      .then(data => setEpisodie(data.results))
-      .catch(error => setError(error.message || "Error al cargar episodios"));
-  }, [page]);
+      // Buscar en todas las páginas
+      const fetchAllEpisodes = async () => {
+        let allResults = [];
+        let currentPage = 1;
+        let totalPages = 1;
+        try {
+          do {
+            const response = await fetch(`https://thesimpsonsapi.com/api/episodes?page=${currentPage}`);
+            const data = await response.json();
+            if (data.results) {
+              allResults = allResults.concat(data.results);
+            }
+            totalPages = data.pages;
+            currentPage++;
+          } while (currentPage <= totalPages);
+          setAllEpisodies(allResults.filter(item => item.name.toLowerCase().includes(nombre_buscar.toLowerCase())));
+        } catch (error) {
+          setError(error.message || "Error al cargar episodios");
+        }
+      };
+      fetchAllEpisodes();
+    
+  }, [page,nombre_buscar]);
 
   const handleRetry = () => {
     setError(null);
     fetch(`https://thesimpsonsapi.com/api/episodes?page=${page}`)
       .then(response => response.json())
-      .then(data => setEpisodie(data.results))
+      .then(data => {setEpisodie(data.results);setEpisodiesOriginal(data.results);})
       .catch(error => setError(error.message || "Error al cargar episodios"));
   };
 
@@ -47,11 +76,11 @@ function Episodes() {
 
   if (error) {
     return (
-      <section style={{textAlign: "center", padding: "40px"}}>
+      <section style={{ textAlign: "center", padding: "40px" }}>
         <h2>¡Ups! Ocurrió un error 😢</h2>
         <p>{error}</p>
-        <button onClick={handleRetry} style={{margin: "12px", padding: "8px 16px", borderRadius: "8px", background: "#007bff", color: "#fff", border: "none"}}>Reintentar</button>
-        <button onClick={() => navigate(-1)} style={{margin: "12px", padding: "8px 16px", borderRadius: "8px", background: "#333", color: "#fff", border: "none"}}>Volver</button>
+        <button onClick={handleRetry} style={{ margin: "12px", padding: "8px 16px", borderRadius: "8px", background: "#007bff", color: "#fff", border: "none" }}>Reintentar</button>
+        <button onClick={() => navigate(-1)} style={{ margin: "12px", padding: "8px 16px", borderRadius: "8px", background: "#333", color: "#fff", border: "none" }}>Volver</button>
       </section>
     );
   }
@@ -76,12 +105,14 @@ function Episodes() {
           <button className="button-s button-search"
             onClick={() => {
               setEstadoButton(true);
+              nombre_buscar.trim()!=""?setEpisodiesOriginal(allEpisodies):setEpisodiesOriginal(episodies);
             }}
           >
             Search
           </button>
           <button className="button-s button-clear" onClick={() => {
             setNombreBuscar("");
+            setEpisodiesOriginal(episodies);
           }}>
             Clear
           </button>
@@ -102,9 +133,7 @@ function Episodes() {
         className="pagination"
       />
       <div className="grid">
-        {episodies.filter(item =>
-          !estadoButton || item.name.toLowerCase().includes(nombre_buscar.toLowerCase())
-        ).map((item) => (
+        {episodiesOriginal.map((item) => (
           <CardEpisodie key={item.id} episodie={item} size={"200"} />
         ))}
       </div>
