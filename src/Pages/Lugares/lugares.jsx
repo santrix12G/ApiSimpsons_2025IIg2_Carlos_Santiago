@@ -4,6 +4,7 @@ import Pagination from "@mui/material/Pagination";
 import CardLocations from '../../Components/CardLocations/CardLocations'
 import { useParams, useNavigate } from 'react-router-dom';
 import DescripcionLocation from '../../Components/Description/DescriptionLocation/DescriptionLocation';
+import { useMemo } from "react";
 
 const lugares = () => {
 
@@ -28,7 +29,7 @@ const lugares = () => {
       .then(response => response.json())
       .then(data => { setLocation(data.results); setOriginalLocations(data.results); })
       .catch(error => setError(error.message || "Error al cargar lugares"));
-  },[page])
+  }, [page])
 
   const handleRetry = () => {
     setError(null);
@@ -62,14 +63,20 @@ const lugares = () => {
           totalPages = data.pages;
           currentPage++;
         } while (currentPage <= totalPages);
-        setLocations(allResults.filter(item => item.name.toLowerCase().includes(nombre_buscar.toLowerCase())));
+        setLocations(allResults);
       } catch (error) {
         setError(error.message || "Error al cargar lugares");
       }
     };
     fetchAllLocations();
 
-  }, [page, nombre_buscar]);
+  }, []);
+
+  const lugaresFiltrados = useMemo(() => {
+    const q = nombre_buscar.trim().toLowerCase();
+    if (!q) return allLocations;
+    return allLocations.filter(c => c.name?.toLowerCase().includes(q));
+  }, [allLocations, nombre_buscar]);
 
   if (error) {
     return (

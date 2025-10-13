@@ -5,6 +5,7 @@ import Pagination from "@mui/material/Pagination";
 import CircularProgress from '@mui/material/CircularProgress';
 import { useParams, useNavigate } from 'react-router-dom';
 import DescriptionEpisodie from "../../Components/Description/DescriptionEpisodie/DescriptionEpisodie";
+import { useMemo } from "react";
 
 function Episodes() {
 
@@ -32,6 +33,22 @@ function Episodes() {
 
   },[page])
 
+  
+  const handleRetry = () => {
+    setError(null);
+    fetch(`https://thesimpsonsapi.com/api/episodes?page=${page}`)
+    .then(response => response.json())
+    .then(data => {setEpisodie(data.results);setEpisodiesOriginal(data.results);})
+      .catch(error => setError(error.message || "Error al cargar episodios"));
+  };
+
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
+  
+  const manejarCambio = (e) => {
+    setNombreBuscar(e.target.value); // obtiene el texto del input
+  };
   useEffect(() => {
     setError(null);
       // Buscar en todas las páginas
@@ -49,30 +66,20 @@ function Episodes() {
             totalPages = data.pages;
             currentPage++;
           } while (currentPage <= totalPages);
-          setAllEpisodies(allResults.filter(item => item.name.toLowerCase().includes(nombre_buscar.toLowerCase())));
+          setAllEpisodies(allResults);
         } catch (error) {
           setError(error.message || "Error al cargar episodios");
         }
       };
       fetchAllEpisodes();
     
-  }, [page,nombre_buscar]);
+  },[]);
 
-  const handleRetry = () => {
-    setError(null);
-    fetch(`https://thesimpsonsapi.com/api/episodes?page=${page}`)
-      .then(response => response.json())
-      .then(data => {setEpisodie(data.results);setEpisodiesOriginal(data.results);})
-      .catch(error => setError(error.message || "Error al cargar episodios"));
-  };
-
-  const handleChange = (event, value) => {
-    setPage(value);
-  };
-
-  const manejarCambio = (e) => {
-    setNombreBuscar(e.target.value); // obtiene el texto del input
-  };
+  const episodiosFiltrados = useMemo(() => {
+      const q = nombre_buscar.trim().toLowerCase();
+      if (!q) return allEpisodies;
+      return allEpisodies.filter(c => c.name?.toLowerCase().includes(q));
+    }, [allEpisodies, nombre_buscar]);
 
   if (error) {
     return (
@@ -105,7 +112,9 @@ function Episodes() {
           <button className="button-s button-search"
             onClick={() => {
               setEstadoButton(true);
-              nombre_buscar.trim()!=""?setEpisodiesOriginal(allEpisodies):setEpisodiesOriginal(episodies);
+              nombre_buscar.trim()!=""?setEpisodiesOriginal(episodiosFiltrados):setEpisodiesOriginal(episodies);
+              // setNombreBuscar("");
+              console.log(nombre_buscar)
             }}
           >
             Search
