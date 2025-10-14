@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="cloud-footer cloud-2-footer"></div>
       <div className="footer-content">
         <p className="simpsons-font">© 2025 The Simpsons Fan App 🍩</p>
-        <p>Hecho con 💛 por Santiago Cuéllar y Carlos Rivas</p>
+        <p>Hecho con 💛 por Santiago Cuéllar y Carlos Rivas Villegas</p>
         <p>
           Hecho con tecnologías como React, React Router, Fetch API y CSS3.
         </p>

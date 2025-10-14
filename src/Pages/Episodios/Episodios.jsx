@@ -145,7 +145,7 @@ function Episodes() {
         vibrante y detalles clave como temporada y número de episodio. ¡Haz clic
         para más información y comparte tu favorito!
       </p>
-      <div className="seasons-buttons">
+      {/* <div className="seasons-buttons">
         {
           Array.from({ length: 35 }, (_, i) => (
             <button key={i} className="button-temporada" value={season} onClick={
@@ -153,7 +153,7 @@ function Episodes() {
             }>Temporada {i + 1}</button>
           ))
         }
-      </div>
+      </div> */}
       <Pagination
         count={39}
         page={page}
