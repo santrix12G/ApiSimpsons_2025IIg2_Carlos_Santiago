@@ -13,6 +13,7 @@ function Episodes() {
   const [allEpisodies, setAllEpisodies] = useState([]);
   const [episodiesOriginal, setEpisodiesOriginal] = useState([]);
   const [page, setPage] = useState(1);
+  const [season, setSeason] = useState(0);
   const [nombre_buscar, setNombreBuscar] = useState("");
   const [estadoButton, setEstadoButton] = useState(false);
   const [error, setError] = useState(null);
@@ -28,58 +29,67 @@ function Episodes() {
   useEffect(() => {
     fetch(`https://thesimpsonsapi.com/api/episodes?page=${page}`)
       .then(response => response.json())
-      .then(data => {setEpisodie(data.results);setEpisodiesOriginal(data.results);})
+      .then(data => { setEpisodie(data.results); setEpisodiesOriginal(data.results); })
       .catch(error => setError(error.message || "Error al cargar episodios"));
 
-  },[page])
+  }, [page])
 
-  
+
   const handleRetry = () => {
     setError(null);
     fetch(`https://thesimpsonsapi.com/api/episodes?page=${page}`)
-    .then(response => response.json())
-    .then(data => {setEpisodie(data.results);setEpisodiesOriginal(data.results);})
+      .then(response => response.json())
+      .then(data => { setEpisodie(data.results); setEpisodiesOriginal(data.results); })
       .catch(error => setError(error.message || "Error al cargar episodios"));
   };
 
   const handleChange = (event, value) => {
     setPage(value);
   };
+
   
+
   const manejarCambio = (e) => {
     setNombreBuscar(e.target.value); // obtiene el texto del input
   };
   useEffect(() => {
     setError(null);
-      // Buscar en todas las páginas
-      const fetchAllEpisodes = async () => {
-        let allResults = [];
-        let currentPage = 1;
-        let totalPages = 1;
-        try {
-          do {
-            const response = await fetch(`https://thesimpsonsapi.com/api/episodes?page=${currentPage}`);
-            const data = await response.json();
-            if (data.results) {
-              allResults = allResults.concat(data.results);
-            }
-            totalPages = data.pages;
-            currentPage++;
-          } while (currentPage <= totalPages);
-          setAllEpisodies(allResults);
-        } catch (error) {
-          setError(error.message || "Error al cargar episodios");
-        }
-      };
-      fetchAllEpisodes();
-    
-  },[]);
+    // Buscar en todas las páginas
+    const fetchAllEpisodes = async () => {
+      let allResults = [];
+      let currentPage = 1;
+      let totalPages = 1;
+      try {
+        do {
+          const response = await fetch(`https://thesimpsonsapi.com/api/episodes?page=${currentPage}`);
+          const data = await response.json();
+          if (data.results) {
+            allResults = allResults.concat(data.results);
+          }
+          totalPages = data.pages;
+          currentPage++;
+        } while (currentPage <= totalPages);
+        setAllEpisodies(allResults);
+      } catch (error) {
+        setError(error.message || "Error al cargar episodios");
+      }
+    };
+    fetchAllEpisodes();
+
+  }, []);
 
   const episodiosFiltrados = useMemo(() => {
-      const q = nombre_buscar.trim().toLowerCase();
-      if (!q) return allEpisodies;
-      return allEpisodies.filter(c => c.name?.toLowerCase().includes(q));
-    }, [allEpisodies, nombre_buscar]);
+    const q = nombre_buscar.trim().toLowerCase();
+    if (!q) return allEpisodies;
+    return allEpisodies.filter(c => c.name?.toLowerCase().includes(q));
+  }, [allEpisodies, nombre_buscar]);
+
+  useEffect(() => {
+    if (season == !0) {
+      let episodiosFiltrados = allEpisodies.filter(c => c.season === season);
+      setEpisodiesOriginal(episodiosFiltrados);
+    }
+  }, [season, allEpisodies]);
 
   if (error) {
     return (
@@ -112,7 +122,7 @@ function Episodes() {
           <button className="button-s button-search"
             onClick={() => {
               setEstadoButton(true);
-              nombre_buscar.trim()!=""?setEpisodiesOriginal(episodiosFiltrados):setEpisodiesOriginal(episodies);
+              nombre_buscar.trim() != "" ? setEpisodiesOriginal(episodiosFiltrados) : setEpisodiesOriginal(episodies);
               // setNombreBuscar("");
               console.log(nombre_buscar)
             }}
@@ -135,6 +145,15 @@ function Episodes() {
         vibrante y detalles clave como temporada y número de episodio. ¡Haz clic
         para más información y comparte tu favorito!
       </p>
+      <div className="seasons-buttons">
+        {
+          Array.from({ length: 35 }, (_, i) => (
+            <button key={i} className="button-temporada" value={season} onClick={
+              ()=>setSeason(i + 1)
+            }>Temporada {i + 1}</button>
+          ))
+        }
+      </div>
       <Pagination
         count={39}
         page={page}
