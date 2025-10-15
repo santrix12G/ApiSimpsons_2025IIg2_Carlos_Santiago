@@ -6,7 +6,7 @@
   align-items: center;
   flex-direction:column ;
   gap:20px;
-  height: fit-content;
+  height:100vh;
   background-image: url("https://thesimpsonsapi.com/clouds-bg.jpg");
   background-position: center;
 }

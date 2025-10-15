@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://github.com/santrix12G/ApiSimpsons_2025IIg2_Carlos_Santiago",
+  "homepage": "https://santrix12g.github.io/ApiSimpsons_2025IIg2_Cuellar_Santiago_Rivas_Carlos/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
