@@ -5,7 +5,7 @@ const NavHeader = () => {
     return (
         <nav className='nav-header'>
             <div className='logo-nav'>
-                <img className='logo-img-nav' src='public/logo_header.png' />
+                <img className='logo-img-nav' src='https://thesimpsonsapi.com/logo.webp' />
             </div>
             <ul className='nav-header-list'>
                 <li className='nav-header-item'>
