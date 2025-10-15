@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from "react-scroll";
 import "./NavHeader.css"
 
 const NavHeader = () => {
@@ -9,10 +10,14 @@ const NavHeader = () => {
             </div>
             <ul className='nav-header-list'>
                 <li className='nav-header-item'>
-                    Episodios
+                    <Link to="nav-bar" smooth={true} duration={500}>
+                        Home
+                    </Link>
                 </li>
                 <li className='nav-header-item'>
-                    Personajes
+                    <Link to='footer' smooth={true} duration={500}>
+                        Footer
+                    </Link>
                 </li>
                 <li className='nav-header-item'>
                     <a href="https://github.com/santrix12G?tab=repositories" aria-label="GitHub" className="github-icon" target="_blank" rel="noreferrer">

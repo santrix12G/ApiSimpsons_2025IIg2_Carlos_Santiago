@@ -105,8 +105,8 @@ body .nav{
   background: radial-gradient(circle, #ffd60a 60%, #ffb300 90%);
   border: 3px solid #000;
   border-radius: 50%;
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   margin: 20px auto;
   display: flex;
   justify-content: center;

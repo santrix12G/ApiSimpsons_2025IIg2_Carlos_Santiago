@@ -4,6 +4,7 @@ import Characters from "../../Pages/Personajes/Personajes";
 import Locations from "../../Pages/Lugares/lugares";
 import Episodes from "../../Pages/Episodios/Episodios";
 import CharacterModal from "../../Components/Description/DescripcionCharacter";
+import { Element } from "react-scroll";
 
 function Main({ children }) {
   return <main className="main">
@@ -15,7 +16,7 @@ function Main({ children }) {
       <Route path="/locations/:id" element={<Locations />} />
       <Route path="/episodes" element={<Episodes />} />
       <Route path="/episodes/:id" element={<Episodes />} />
-      
+
     </Routes>
   </main>;
 }
@@ -23,17 +24,19 @@ function Main({ children }) {
 function Welcome() {
   return (
     <div className="welcome">
-      <div className="emoji">🍺</div>
-      <h2 className="simpsons-font title">¡Bienvenido a Springfield!</h2>
-      <p className="subtitle">
-        Selecciona una sección del menú para explorar el mundo de Los Simpson
-      </p>
-      <div className="icons">
-        <span>🍩</span>
-        <span>🏠</span>
-        <span>👨‍👩‍👧‍👦</span>
-        <span>🍺</span>
-      </div>
+      <Element name="main_welcome">
+        <div className="emoji">🍺</div>
+        <h2 className="simpsons-font title">¡Bienvenido a Springfield!</h2>
+        <p className="subtitle">
+          Selecciona una sección del menú para explorar el mundo de Los Simpson
+        </p>
+        <div className="icons">
+          <span>🍩</span>
+          <span>🏠</span>
+          <span>👨‍👩‍👧‍👦</span>
+          <span>🍺</span>
+        </div>
+      </Element>
     </div>
   );
 }
